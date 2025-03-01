@@ -38,19 +38,41 @@ class Deck:
 @dataclass
 class Player:
     player_hand: int = 0
-    lives: int = 3
     bank: int = 100
 
     def add_card(self, card):
         self.hand.append(card)
 
+    def calculate_hand(self):
+        total = 0
+        aces = 0
+        for card in self.hand:
+            total += Deck.ranks[card.rank]
+            if card.rank == 'Ace':
+                aces += 1
+        while total > 21 and aces:
+            total -= 10
+            aces -= 1
+        return total
+
 
 @dataclass
 class Dealer:
-    lives: int = 3
     dealer_hand: int = 0
 
     def add_card(self, card):
         self.hand.append(card)
+
+    def calculate_hand(self):
+        total = 0
+        aces = 0
+        for card in self.hand:
+            total += Deck.ranks[card.rank]
+            if card.rank == 'Ace':
+                aces += 1
+        while total > 21 and aces:
+            total -= 10
+            aces -= 1
+        return total
 # ----------------------------------------------------------------------
 
