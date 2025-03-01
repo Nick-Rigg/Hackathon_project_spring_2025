@@ -37,15 +37,20 @@ class Deck:
 # ------------ Class relating to the dealer and player ----------------
 @dataclass
 class Player:
-    gold: int
-    bet: int
-    lives: int = field(default_factory=3)
-    bank: int = field(default_factory=100)
+    player_hand: int = 0
+    lives: int = 3
+    bank: int = 100
+
+    def add_card(self, card):
+        self.hand.append(card)
 
 
 @dataclass
 class Dealer:
-    lives: int
-    deck_hand: int
+    lives: int = 3
+    dealer_hand: int = 0
+
+    def add_card(self, card):
+        self.hand.append(card)
 # ----------------------------------------------------------------------
 
