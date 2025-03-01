@@ -1,55 +1,81 @@
 from utils.classes import *
 
 
+def player_turn(player: Player, deck: Deck):
+    player_score = player.calculate_hand()
+    print(player_score)
 
-
-def black_jack_game():
-    dealer = Dealer()
-    player = Player()
-    dealer_score = 0
-    player_score = 0
-    deck = Deck()
-    deck.shuffle()
-
-    # Player Bet
-    player_bet = int(input('Player, place your bet: '))
-
-    # Dealer Not Bet
-
-    # Drawing Cards
-    
-    for _ in range(2):
-        player.add_card(deck.deal())
-        dealer.add_card(deck.deal())
-    
-    # Player Up
-    # Dealer Up
-    # Player Up
-    # Dealer Down
-
-    
-
-    # Do you want to hit or stand
-    # hit = str(input('\nPlayer, do you wish to hit or stand (H/S): ')).upper()
-
-    while True:
+    while True and player_score < 21:
         player_option = str(input('\nPlayer, do you wish to hit or stand (H/S): ')).upper()
         if player_option == 'H':
-            print('bruh')
-            # Player Draw Card Function
+            player_hand = player.add_card(deck.deal())
+            player_score = player.calculate_hand()
+            print(f'player score: {player_score}')
         else:
             break
+
+    return player_score
+
+
+def dealer_turn(dealer: Dealer, deck: Deck):
+    dealer_score = dealer.calculate_hand()
+    print(f'dealer score: {dealer_score}')
 
     # Dealer Draws
     while True:
         if dealer_score <= 16:
-            print(str(dealer_score) + '\n')
-            dealer_score+=1
+            dealer_hand = dealer.add_card(deck.deal())
+            dealer_score = dealer.calculate_hand()
+            print(f'dealer score: {dealer_score}')
         else:
-            break
-    print(str(dealer_score) + '\n')
+            return dealer_score
 
-    # Betting -> Player Up -> Dealer Up -> Player Up -> Dealer Down
+
+
+
+
+def black_jack_game():
+    dealer = Dealer(deck=Deck())
+    player = Player(deck=Deck())
+    deck = Deck()
+    deck.shuffle()
+    bank = player.bank
+    player_bet = int(input('Player, place your bet: '))
+
+    # Drawing Cards
+    for _ in range(2):
+        player_hand = player.add_card(deck.deal())
+        dealer_hand = dealer.add_card(deck.deal())
+    
+    print(f'Players card: {player_hand[0]}, {player_hand[1]}')
+    print(f'Dealers card: {dealer_hand[0]}, card 2 is hidden')
+
+
+    players_draw = player_turn(player, deck)
+    
+    if players_draw > 21:
+        print('You went over 21!')
+        bank -= player_bet
+        print(f'new balance: {bank}')
+    else:
+        dealers_draw = dealer_turn(dealer, deck)
+        
+        if players_draw > dealers_draw:
+            print('You win')
+            bank += player_bet
+            print(f'new balance: {bank}')
+        elif dealers_draw > players_draw:
+            print('Dealer won')
+            bank -= player_bet
+            print(f'new balance: {bank}')
+        else:
+            print('You tied!')
+            print(f'You have the same balance: {bank}')
+
+
+
+
+
     # Stand (Player is done, dealer draws) 
     # Hit (Player draws until stand or bust, then dealer draws) ->
     # Double Down (Player doubles bet but draws only 1 card, then dealer draws) ->

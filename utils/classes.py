@@ -37,17 +37,19 @@ class Deck:
 # ------------ Class relating to the dealer and player ----------------
 @dataclass
 class Player:
-    player_hand: int = 0
+    deck: Deck
+    player_hand: list[Card] = field(default_factory=list)
     bank: int = 100
 
     def add_card(self, card):
         self.player_hand.append(card)
-
+        return self.player_hand
+    
     def calculate_hand(self):
         total = 0
         aces = 0
         for card in self.player_hand:
-            total += Deck.ranks[card.rank]
+            total += self.deck.ranks[card.rank]
             if card.rank == 'Ace':
                 aces += 1
         while total > 21 and aces:
@@ -58,16 +60,18 @@ class Player:
 
 @dataclass
 class Dealer:
-    dealer_hand: int = 0
+    deck: Deck
+    dealer_hand: list[Card] = field(default_factory=list)
 
     def add_card(self, card):
         self.dealer_hand.append(card)
+        return self.dealer_hand
 
     def calculate_hand(self):
         total = 0
         aces = 0
         for card in self.dealer_hand:
-            total += Deck.ranks[card.rank]
+            total += self.deck.ranks[card.rank]
             if card.rank == 'Ace':
                 aces += 1
         while total > 21 and aces:
