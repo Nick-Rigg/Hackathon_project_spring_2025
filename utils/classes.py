@@ -41,12 +41,12 @@ class Player:
     bank: int = 100
 
     def add_card(self, card):
-        self.hand.append(card)
+        self.player_hand.append(card)
 
     def calculate_hand(self):
         total = 0
         aces = 0
-        for card in self.hand:
+        for card in self.player_hand:
             total += Deck.ranks[card.rank]
             if card.rank == 'Ace':
                 aces += 1
@@ -61,12 +61,12 @@ class Dealer:
     dealer_hand: int = 0
 
     def add_card(self, card):
-        self.hand.append(card)
+        self.dealer_hand.append(card)
 
     def calculate_hand(self):
         total = 0
         aces = 0
-        for card in self.hand:
+        for card in self.dealer_hand:
             total += Deck.ranks[card.rank]
             if card.rank == 'Ace':
                 aces += 1
