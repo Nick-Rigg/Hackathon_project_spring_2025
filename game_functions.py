@@ -6,19 +6,27 @@ def get_player_choice():
 
 def execute_player_turn(player: Player, deck: Deck, bet_amount: int):
     player_score = player.calculate_hand()
+    has_hit = False
 
     while player_score < 21:
         player_choice = get_player_choice()
         if player_choice == 'H':
             player.add_card(deck.deal())
+            has_hit = True
         elif player_choice == 'D':
+            if has_hit:
+                print('You cannot double down after hitting.')
+                continue
             if (bet_amount * 2) > player.bank:
-                print('You do not have the funds to double down')
+                print('You do not have the funds to double down.')
                 continue
             player.add_card(deck.deal())
+            print('You have doubled down and received one more card.')
+            player_score = player.calculate_hand()
             break
         elif player_choice == 'S':
             break
+        
         player_score = player.calculate_hand()
         print(f'Player score: {player_score}')
 
@@ -30,7 +38,6 @@ def execute_dealer_turn(dealer: Dealer, deck: Deck):
     while dealer_score <= 16:
         dealer.add_card(deck.deal())
         dealer_score = dealer.calculate_hand()
-        print(f'Dealer score: {dealer_score}')
 
     return dealer_score
 
@@ -58,24 +65,23 @@ def play_blackjack(player: Player, dealer: Dealer, deck: Deck):
     if player.calculate_hand() == 21:
         print('You hit a blackjack!')
         player.bank += (1.5 * bet_amount)
-
-    player_choice, player_score = execute_player_turn(player, deck, bet_amount)
-
-    if player_score > 21:
-        print('You went over 21!')
-        player.bank -= (2 * bet_amount) if player_choice == 'D' else bet_amount
     else:
-        dealer_score = execute_dealer_turn(dealer, deck)
+        player_choice, player_score = execute_player_turn(player, deck, bet_amount)
 
-        if player_score > dealer_score or dealer_score > 21:
-            print('You win!')
-            player.bank += (2 * bet_amount) if player_choice == 'D' else bet_amount
-        elif dealer_score > player_score:
-            print('Dealer won!')
+        if player_score > 21:
+            print('You went over 21!')
             player.bank -= (2 * bet_amount) if player_choice == 'D' else bet_amount
         else:
-            print('You tied!')
-            player.bank = player.bank
+            dealer_score = execute_dealer_turn(dealer, deck)
+
+            if player_score > dealer_score or dealer_score > 21:
+                print(f'You win! player: {player_score}, dealer: {dealer_score}')
+                player.bank += (2 * bet_amount) if player_choice == 'D' else bet_amount
+            elif dealer_score > player_score:
+                print(f'Dealer won! dealer: {dealer_score}, player: {player_score}')
+                player.bank -= (2 * bet_amount) if player_choice == 'D' else bet_amount
+            else:
+                print('You tied!')
 
     print(f'New balance: {player.bank}')
 
@@ -86,12 +92,13 @@ def main():
     bank_amount = player.bank
     print(f'You start with: {bank_amount} dollars')
     
-    while bank_amount != 0:
+    while bank_amount > 0:
         player.reset_hand()
         dealer.reset_hand()
         deck.reset_deck()
         deck.shuffle()
         play_blackjack(player, dealer, deck)
+        bank_amount = player.bank
 
 if __name__ == "__main__":
     main()
