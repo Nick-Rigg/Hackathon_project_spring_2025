@@ -38,17 +38,17 @@ class Deck:
 @dataclass
 class Player:
     deck: Deck
-    player_hand: list[Card] = field(default_factory=list)
+    hand: list[Card] = field(default_factory=list)
     bank: int = 100
 
     def add_card(self, card):
-        self.player_hand.append(card)
-        return self.player_hand
+        self.hand.append(card)
+        return self.hand
     
     def calculate_hand(self):
         total = 0
         aces = 0
-        for card in self.player_hand:
+        for card in self.hand:
             total += self.deck.ranks[card.rank]
             if card.rank == 'Ace':
                 aces += 1
@@ -56,21 +56,24 @@ class Player:
             total -= 10
             aces -= 1
         return total
+    
+    def reset_hand(self):
+        self.hand = []
 
 
 @dataclass
 class Dealer:
     deck: Deck
-    dealer_hand: list[Card] = field(default_factory=list)
+    hand: list[Card] = field(default_factory=list)
 
     def add_card(self, card):
-        self.dealer_hand.append(card)
-        return self.dealer_hand
+        self.hand.append(card)
+        return self.hand
 
     def calculate_hand(self):
         total = 0
         aces = 0
-        for card in self.dealer_hand:
+        for card in self.hand:
             total += self.deck.ranks[card.rank]
             if card.rank == 'Ace':
                 aces += 1
@@ -78,5 +81,8 @@ class Dealer:
             total -= 10
             aces -= 1
         return total
+    
+    def reset_hand(self):
+        self.hand = []
 # ----------------------------------------------------------------------
 
