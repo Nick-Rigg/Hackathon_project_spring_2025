@@ -86,3 +86,28 @@ class Dealer:
         self.hand = []
 # ----------------------------------------------------------------------
 
+
+# --------------- Class related to shop --------------------------------
+@dataclass
+class Shop:
+    items: list = field(default_factory=list)
+
+    def get_items(self):
+        return self.items
+    
+
+@dataclass
+class PowerUps:
+    shop: Shop
+    name: str
+    price: int
+    description: str
+
+    def peek_at_dealers_score(self):
+        self.name = 'Dealer Insight'
+        self.price = 50
+        self.description = 'Peek at the dealers score'
+        self.add_item_to_shop(self.name)
+
+    def add_item_to_shop(self):
+     self.shop.items.append(self.name)
