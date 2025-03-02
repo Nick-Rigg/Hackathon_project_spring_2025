@@ -56,6 +56,9 @@ class Player:
             total -= 10
             aces -= 1
         return total
+    
+    def reset_hand(self):
+        self.hand = []
 
 
 @dataclass
@@ -78,5 +81,8 @@ class Dealer:
             total -= 10
             aces -= 1
         return total
+    
+    def reset_hand(self):
+        self.hand = []
 # ----------------------------------------------------------------------
 

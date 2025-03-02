@@ -1,7 +1,7 @@
 from utils.classes import *
 
 def get_player_choice():
-    print('Would you like to Hit (H), Stand (S), Double Down (D), or Split (T)?')
+    print('Would you like to Hit (H), Stand (S), Double Down (D)?')
     return input('Player, what would you like to do: ').strip().upper()
 
 def execute_player_turn(player: Player, deck: Deck, bet_amount: int):
@@ -44,14 +44,8 @@ def place_player_bet(bank_balance):
         except ValueError:
             print('Invalid input. Please enter a number.')
 
-def play_blackjack():
-    deck = Deck()
-    deck.shuffle()
-
-    dealer = Dealer(deck)
-    player = Player(deck)
-    bank_balance = player.bank
-    bet_amount = place_player_bet(bank_balance)
+def play_blackjack(player: Player, dealer: Dealer, deck: Deck):
+    bet_amount = place_player_bet(player.bank)
 
     # Drawing Cards
     for _ in range(2):
@@ -63,29 +57,41 @@ def play_blackjack():
 
     if player.calculate_hand() == 21:
         print('You hit a blackjack!')
-        bank_balance += (1.5 * bet_amount)
+        player.bank += (1.5 * bet_amount)
 
     player_choice, player_score = execute_player_turn(player, deck, bet_amount)
 
     if player_score > 21:
         print('You went over 21!')
-        bank_balance -= (2 * bet_amount) if player_choice == 'D' else bet_amount
+        player.bank -= (2 * bet_amount) if player_choice == 'D' else bet_amount
     else:
         dealer_score = execute_dealer_turn(dealer, deck)
 
         if player_score > dealer_score or dealer_score > 21:
             print('You win!')
-            bank_balance += (2 * bet_amount) if player_choice == 'D' else bet_amount
+            player.bank += (2 * bet_amount) if player_choice == 'D' else bet_amount
         elif dealer_score > player_score:
             print('Dealer won!')
-            bank_balance -= (2 * bet_amount) if player_choice == 'D' else bet_amount
+            player.bank -= (2 * bet_amount) if player_choice == 'D' else bet_amount
         else:
             print('You tied!')
+            player.bank = player.bank
 
-    print(f'New balance: {bank_balance}')
+    print(f'New balance: {player.bank}')
 
 def main():
-    play_blackjack()
+    deck = Deck()
+    dealer = Dealer(deck)
+    player = Player(deck)
+    bank_amount = player.bank
+    print(f'You start with: {bank_amount} dollars')
+    
+    while bank_amount != 0:
+        player.reset_hand()
+        dealer.reset_hand()
+        deck.reset_deck()
+        deck.shuffle()
+        play_blackjack(player, dealer, deck)
 
 if __name__ == "__main__":
     main()
