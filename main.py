@@ -33,15 +33,18 @@ class Game:
             match self.state:
                 case 'GAME_START':
                     if event.type == pygame.MOUSEBUTTONDOWN:
-
                         if 50 <= mouse_position[0] <= 250 and 300 <= mouse_position[1] <= 500:
-                            self.scene.button_press('hit')
+                            self.state = self.scene.button_press('hit', self.state)
                         elif 300 <= mouse_position[0] <= 500 and 300 <= mouse_position[1] <= 500:
-                            self.scene.button_press('stand')
+                            self.state = self.scene.button_press('stand', self.state)
                         elif 550 <= mouse_position[0] <= 750 and 300 <= mouse_position[1] <= 500:
-                            self.scene.button_press('double down')
+                            self.state = self.scene.button_press('double down', self.state)
                 case 'GAME':
-                    pass
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if 150 <= mouse_position[0] <= 350 and 300 <= mouse_position[1] <= 500:
+                            self.state = self.scene.button_press('hit', self.state)
+                        elif 450 <= mouse_position[0] <= 650 and 300 <= mouse_position[1] <= 500:
+                            self.state = self.scene.button_press('stand', self.state)
                 case 'GAME_OVER':
                     pass
 
