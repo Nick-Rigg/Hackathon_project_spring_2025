@@ -90,6 +90,16 @@ class Dealer:
             aces -= 1
         return total
     
+    def calculate_hidden_hand(self):
+        total = 0
+        aces = 0
+        total += self.deck.ranks[(self.hand[0]).rank]
+        #while total > 21 and aces:
+        #    total -= 10
+        #    aces -= 1
+        return total
+
+    
     def reset_hand(self):
         self.hand = []
 # ----------------------------------------------------------------------
