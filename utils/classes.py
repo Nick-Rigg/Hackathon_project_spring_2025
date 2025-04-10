@@ -122,7 +122,7 @@ class Shop:
         player_response = input('Would you like to look at the shop? (Y/N): ').strip().upper()
 
         if player_response == 'Y':
-            return [i.name for i in self.item]z
+            return [i.name for i in self.item]
         else:
             return None
         
