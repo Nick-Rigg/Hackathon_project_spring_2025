@@ -1,11 +1,5 @@
 from utils.classes import *
-
-def show_shop_items(shop: Shop):
-    player_response = str(input('Would you like to look and the shop? (Y/N): ')).strip().upper()
-
-    if player_response == 'Y': print(shop.get_items())
-    else: return None
-
+from power_ups import items
 
 
 def get_player_choice():
@@ -18,7 +12,8 @@ def execute_player_turn(player: Player, deck: Deck, shop: Shop, bet_amount: int)
     player_score = player.calculate_hand()
     has_hit = False
 
-    look_at_shop = show_shop_items(shop)
+    item_shop = shop.get_items()
+    print(item_shop)
 
 
     while player_score < 21:
@@ -39,6 +34,9 @@ def execute_player_turn(player: Player, deck: Deck, shop: Shop, bet_amount: int)
             break
         elif player_choice == 'S':
             break
+        else:
+            print('Invalid choice. Please choose again')
+            continue
         
         player_score = player.calculate_hand()
         print(f'Player score: {player_score}')
@@ -61,7 +59,7 @@ def execute_dealer_turn(dealer: Dealer, deck: Deck):
 def place_player_bet(bank_balance):
     while True:
         try:
-            bet_amount = int(input('Player, place your bet: '))
+            bet_amount = float(input('Player, place your bet: '))
             if 0 < bet_amount <= bank_balance:
                 return bet_amount
             print('Invalid bet. Enter a new betting amount: ')
@@ -108,7 +106,7 @@ def play_blackjack(player: Player, dealer: Dealer, shop: Shop, deck: Deck):
 
 def main():
     deck = Deck()
-    shop = Shop()
+    shop = Shop(item=items)
     dealer = Dealer(deck)
     player = Player(deck)
     bank_amount = player.bank

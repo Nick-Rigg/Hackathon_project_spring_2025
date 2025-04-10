@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 import random
+from typing import List, Optional
+
 
 
 
@@ -95,25 +97,24 @@ class Dealer:
 
 # --------------- Class related to shop --------------------------------
 @dataclass
-class Shop:
-    items: list = field(default_factory=list)
-
-    def get_items(self):
-        return self.items
-    
-
-@dataclass
-class PowerUps:
-    shop: Shop
+class PowerUp:
     name: str
     price: int
     description: str
 
-    def peek_at_dealers_score(self):
-        self.name = 'Dealer Insight'
-        self.price = 50
-        self.description = 'Peek at the dealers score'
-        self.add_item_to_shop(self.name)
 
-    def add_item_to_shop(self):
-     self.shop.items.append(self.name)
+@dataclass
+class Shop:
+    item:List[PowerUp]
+
+
+    def get_items(self) -> Optional[List[str]]:
+        player_response = input('Would you like to look at the shop? (Y/N): ').strip().upper()
+
+        if player_response == 'Y':
+            return [i.name for i in self.item]z
+        else:
+            return None
+        
+    def see_item_attributes(self):
+        return [f'Name: {i.name}, Price: {i.price}, Description: {i.description}' for i in self.item]
