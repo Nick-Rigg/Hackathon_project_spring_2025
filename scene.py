@@ -16,7 +16,8 @@ class Scene:
         
         # card_texture = pygame.image.load('textures/Club2.png').convert_alpha()
         # card_texture = pygame.transform.scale(card_texture, (100, 100))
-        font = pygame.font.SysFont('Arial', 64)
+        # font = pygame.font.SysFont('Arial', 64)
+        font = pygame.font.SysFont('Arial', 200)
         # screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
         position = (20, 20)
         text = "This is a really long sentence with a couple of breaks.\nSometimes it will break even if there isn't a break " \
@@ -112,6 +113,8 @@ class Scene:
         self.start_buttons = pygame.sprite.Group()
         self.game_buttons = pygame.sprite.Group()
         self.text = pygame.sprite.Group()
+
+        self.text = TextEntity([self.text])
         
         self.player_hand = []
         self.dealer_hand = []
@@ -127,6 +130,8 @@ class Scene:
         
         Entity([self.game_buttons], position = (150, 300), image=hit_button_inverted_texture)
         Entity([self.game_buttons], position = (450, 300), image=stand_button_texture)
+
+        TextEntity([self.text], self.app.screen, position, font, text)
         
     def start_game(self):
         self.player.reset_hand()
@@ -198,16 +203,29 @@ class Scene:
                 # pass
                 self.start_buttons.draw(self.app.screen)
                 self.sprites.draw(self.app.screen)
+                self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.Font('ThaleahFat.ttf', 75), color = pygame.Color('#ffffff'), text = f'Dealer Score: {self.dealer.calculate_hidden_hand()}')
+                #self.text.draw(self.app.screen)
             case 'GAME':
                 self.sprites.draw(self.app.screen)
                 self.game_buttons.draw(self.app.screen)
+                self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.Font('ThaleahFat.ttf', 75), color = pygame.Color('#ffffff'), text = f'Dealer Score: {self.dealer.calculate_hidden_hand()}')
+                #self.text.draw(self.app.screen)
             case 'GAME_OVER':
                 self.sprites.draw(self.app.screen)
+                # self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.SysFont('Arial', 30), color = pygame.Color('#38cff5'), text = f'Dealer Score: {self.dealer.calculate_hand()}')
+                self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.Font('ThaleahFat.ttf', 75), color = pygame.Color('#ffffff'), text = f'Dealer Score: {self.dealer.calculate_hand()}')
         
-    #     self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.SysFont('Arial', 16), color = pygame.Color('#38cff5'), text = "This is a really long sentence with a couple of breaks.\nSometimes it will break even if there isn't a break " \
-    #    "in the sentence, but that's because the text is too long to fit the screen.\nIt can look strange sometimes.\n" \
-    #    "This function doesn't check if the text is too high to fit on the height of the surface though, so sometimes " \
-    #    "text will disappear underneath the surface")
+        # self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.SysFont('Arial', 16), color = pygame.Color('#38cff5'), text = "This is a really long sentence with a couple of breaks.\nSometimes it will break even if there isn't a break " \
+        # "in the sentence, but that's because the text is too long to fit the screen.\nIt can look strange sometimes.\n" \
+        # "This function doesn't check if the text is too high to fit on the height of the surface though, so sometimes " \
+        # "text will disappear underneath the surface")
+
+        # number = 1
+
+        # self.text.blit_text(self.app.screen, position = (20, 20), font = pygame.font.SysFont('Arial', 30), color = pygame.Color('#38cff5'), text = f'Dealer Score: {self.dealer.calculate_hidden_hand()}')
+        # self.text.blit_text(self.app.screen, position = (20, 520), font = pygame.font.SysFont('Arial', 30), color = pygame.Color('#240609'), text = f"Player Score: {self.player.calculate_hand()}")
+        # self.text.blit_text(self.app.screen, position = (20, 520), font = pygame.font.Font('ThaleahFat.ttf', 50), color = pygame.Color('#47090f'), text = f"Player Score: {self.player.calculate_hand()}")
+        self.text.blit_text(self.app.screen, position = (20, 520), font = pygame.font.Font('ThaleahFat.ttf', 75), color = pygame.Color('#ffffff'), text = f"Player Score: {self.player.calculate_hand()}")
 
 
     def button_press(self, button_type, game_state):

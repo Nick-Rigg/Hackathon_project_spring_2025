@@ -3,6 +3,8 @@ import sys
 from globals import *
 from scene import Scene
 
+# NOTE TO BRUZ: IMPLEMENT THE CHIP STUFF IN THE VISUAL PORTION OF THE GAME BRUDIE
+
 class Game:
     def __init__(self):
         pygame.init()
