@@ -1,5 +1,8 @@
-from utils.classes import *
-from power_ups import items
+from utils.classes.deck import Deck
+from utils.classes.player import Player
+from utils.classes.dealer import Dealer
+from utils.classes.shop import Shop
+from utils.classes.powerup import PowerUp
 
 
 def get_player_choice():
@@ -45,24 +48,22 @@ def execute_player_turn(player: Player, deck: Deck, shop: Shop, bet_amount: int)
 
 
 
-def execute_dealer_turn(dealer: Dealer, deck: Deck):
-    dealer_score = dealer.calculate_hand()
-    
-    while dealer_score <= 16:
-        dealer.add_card(deck.deal())
-        dealer_score = dealer.calculate_hand()
 
+def execute_dealer_turn(dealer: Dealer, deck: Deck) -> int:
+    while (dealer_score := dealer.calculate_hand()) <= 16:
+        dealer.add_card(deck.deal())
     return dealer_score
 
 
 
-def place_player_bet(bank_balance):
+
+def place_player_bet(bank_balance) -> float:
     while True:
         try:
             bet_amount = float(input('Player, place your bet: '))
             if 0 < bet_amount <= bank_balance:
                 return bet_amount
-            print('Invalid bet. Enter a new betting amount: ')
+            print(f'Invalid bet. Please enter an amount between 0 and {bank_balance}')
         except ValueError:
             print('Invalid input. Please enter a number.')
 
@@ -106,7 +107,7 @@ def play_blackjack(player: Player, dealer: Dealer, shop: Shop, deck: Deck):
 
 def main():
     deck = Deck()
-    shop = Shop(item=items)
+    shop = Shop(item=PowerUp.items)
     dealer = Dealer(deck)
     player = Player(deck)
     bank_amount = player.bank
